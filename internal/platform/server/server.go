@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/marcohb99/go-api-example/internal/platform/server/handler/health"
 	"github.com/marcohb99/go-api-example/internal/platform/server/handler/hello"
+	"github.com/marcohb99/go-api-example/internal/platform/server/handler/release"
 )
 
 // Server encapsulates a server with an engine and an address
@@ -36,5 +37,8 @@ func (s *Server) registerRoutes() {
 	s.engine.GET("/health", health.CheckHandler())
 
 	// hello
-	s.engine.GET("/hello", hello.HelloGet())
+	s.engine.GET("/hello", hello.GetHandler())
+
+	// release
+	s.engine.POST("/releases", release.CreateHandler())
 }
