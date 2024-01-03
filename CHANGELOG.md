@@ -1,3 +1,14 @@
+## 0.3.0 (2024-01-03)
+
+### Feat
+
+- **value-objects**: use value objects to validate domain rules
+- **WIP**: add code to insert release in database
+
+### Refactor
+
+- **add-release**: inject repository
+
 ## 0.2.1 (2023-12-29)
 
 ### Refactor
