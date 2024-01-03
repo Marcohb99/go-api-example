@@ -6,6 +6,8 @@ import "context"
 type ReleaseRepository interface {
 	Save(ctx context.Context, release Release) error
 }
+//go:generate mockery --case=snake --outpkg=storagemocks --output=platform/storage/storagemocks --name=ReleaseRepository
+
 
 // Release is the data structure that represents a release.
 type Release struct {

@@ -15,7 +15,7 @@ const (
 	dbName = "go_api_example"
 )
 
-type createRequest struct {
+type createReleaseRequest struct {
 	ID          string `json:"id" binding:"required"`
 	Title       string `json:"title" binding:"required"`
 	Released    string `json:"released" binding:"required"`
@@ -28,7 +28,7 @@ type createRequest struct {
 func CreateHandler(releaseRepository apiExample.ReleaseRepository) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// request processing
-		var req createRequest
+		var req createReleaseRequest
 
 		// json validation
 		if err := ctx.BindJSON(&req); err != nil {
