@@ -28,12 +28,12 @@ func (r *ReleaseRepository) Save(ctx context.Context, release apiExample.Release
 
 	// build the query with the table and the release fields
 	query, args := releaseSQLStruct.InsertInto(sqlReleaseTable, sqlRelease{
-		ID:          release.ID(),
-		Title:       release.Title(),
-		Released:    release.Released(),
-		ResourceUrl: release.ResourceUrl(),
-		Uri:         release.Uri(),
-		Year:        release.Year(),
+		ID:          release.ID().String(),
+		Title:       release.Title().String(),
+		Released:    release.Released().String(),
+		ResourceUrl: release.ResourceUrl().String(),
+		Uri:         release.Uri().String(),
+		Year:        release.Year().String(),
 	}).Build()
 
 	// execute the query

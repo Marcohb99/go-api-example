@@ -33,7 +33,7 @@ func TestHandler_Create(t *testing.T)  {
 	t.Run("given an invalid request it returns 400", func(t *testing.T) {
 		// GIVEN
 		request := createReleaseRequest{
-			ID: "fihqeiofhiowef-ochoqc",
+			ID: "8a1c5cdc-ba57-445a-994d-aa412d23723f",
 			Title: "Ultra Mono",
 			Released: "2020-01-01",
 			ResourceUrl: "https://api.discogs.com/releases/1809205",
@@ -62,7 +62,7 @@ func TestHandler_Create(t *testing.T)  {
 	t.Run("given a valid request it returns 201", func(t *testing.T) {
 		// GIVEN
 		request := createReleaseRequest{
-			ID: "fihqeiofhiowef-ochoqc",
+			ID: "8a1c5cdc-ba57-445a-994d-aa412d23723f",
 			Title: "Ultra Mono",
 			Released: "2020-01-01",
 			ResourceUrl: "https://api.discogs.com/releases/1809205",

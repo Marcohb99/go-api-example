@@ -37,8 +37,12 @@ func CreateHandler(releaseRepository apiExample.ReleaseRepository) gin.HandlerFu
 		}
 
 		// instantiate object
-		release := apiExample.NewRelease(req.ID, req.Title, req.Released, req.ResourceUrl, req.Uri, req.Year)
-
+		release, err := apiExample.NewRelease(req.ID, req.Title, req.Released, req.ResourceUrl, req.Uri, req.Year)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, err.Error())
+			return
+		}
+		
 		// save object
 		if err := releaseRepository.Save(ctx, release); err != nil {
 			ctx.JSON(http.StatusInternalServerError, err.Error())
