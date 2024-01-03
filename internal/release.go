@@ -1,5 +1,12 @@
 package apiExample
 
+import "context"
+
+// ReleaseRepository defines the expected behaviour for a release storage service.
+type ReleaseRepository interface {
+	Save(ctx context.Context, release Release) error
+}
+
 // Release is the data structure that represents a release.
 type Release struct {
 	id          string

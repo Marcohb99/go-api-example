@@ -1,13 +1,10 @@
 package release
 
 import (
-	"database/sql"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	apiExample "github.com/marcohb99/go-api-example/internal"
-	"github.com/marcohb99/go-api-example/internal/platform/storage/mysql"
 )
 
 const (
@@ -28,7 +25,7 @@ type createRequest struct {
 }
 
 // CreateHandler returns an HTTP handler for courses creation.
-func CreateHandler() gin.HandlerFunc {
+func CreateHandler(releaseRepository apiExample.ReleaseRepository) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// request processing
 		var req createRequest
@@ -40,20 +37,10 @@ func CreateHandler() gin.HandlerFunc {
 		}
 
 		// instantiate object
-		course := apiExample.NewRelease(req.ID, req.Title, req.Released, req.ResourceUrl, req.Uri, req.Year)
+		release := apiExample.NewRelease(req.ID, req.Title, req.Released, req.ResourceUrl, req.Uri, req.Year)
 
-		// database connection
-		mysqlURI := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
-		db, err := sql.Open("mysql", mysqlURI)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, err.Error())
-			return
-		}
-
-		// persist instantiating the repository
-		courseRepository := mysql.NewReleaseRepository(db)
-
-		if err := courseRepository.Save(ctx, course); err != nil {
+		// save object
+		if err := releaseRepository.Save(ctx, release); err != nil {
 			ctx.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
