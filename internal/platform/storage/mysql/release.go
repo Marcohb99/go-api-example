@@ -4,7 +4,7 @@ const (
 	sqlReleaseTable = "releases"
 )
 
-type sqlRelease struct {
+type SqlRelease struct {
 	ID          string `db:"id"`
 	Title       string `db:"title"`
 	Released    string `db:"released"`

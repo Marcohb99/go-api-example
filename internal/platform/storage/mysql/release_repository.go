@@ -24,10 +24,10 @@ func NewReleaseRepository(db *sql.DB) *ReleaseRepository {
 // Save implements the apiExample.ReleaseRepository interface.
 func (r *ReleaseRepository) Save(ctx context.Context, release apiExample.Release) error {
 	// build struct based on the DTO class sqlRelease
-	releaseSQLStruct := sqlbuilder.NewStruct(new(sqlRelease))
+	releaseSQLStruct := sqlbuilder.NewStruct(new(SqlRelease))
 
 	// build the query with the table and the release fields
-	query, args := releaseSQLStruct.InsertInto(sqlReleaseTable, sqlRelease{
+	query, args := releaseSQLStruct.InsertInto(sqlReleaseTable, SqlRelease{
 		ID:          release.ID().String(),
 		Title:       release.Title().String(),
 		Released:    release.Released().String(),
@@ -43,4 +43,16 @@ func (r *ReleaseRepository) Save(ctx context.Context, release apiExample.Release
 	}
 
 	return nil
+}
+
+func (r *ReleaseRepository) All(ctx context.Context) ([]apiExample.Release, error) {
+	
+	sql, args := sqlbuilder.Select("*").From(sqlReleaseTable).Limit(10).Build()
+	
+	rows, err := r.db.QueryContext(ctx, sql, args...)
+	if err != nil {
+		return []apiExample.Release{}, err
+	}
+	
+	return FromRows(rows)
 }
