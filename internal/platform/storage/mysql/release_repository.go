@@ -35,6 +35,7 @@ func (r *ReleaseRepository) Save(ctx context.Context, release apiExample.Release
 		Uri:         release.Uri().String(),
 		Year:        release.Year().String(),
 	}).Build()
+	fmt.Println(query, args)
 
 	// execute the query
 	_, err := r.db.ExecContext(ctx, query, args...)
