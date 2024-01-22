@@ -15,6 +15,7 @@ import (
 // ReleaseRepository defines the expected behaviour for a release storage service.
 type ReleaseRepository interface {
 	Save(ctx context.Context, release Release) error
+	All(ctx context.Context) ([]Release, error)
 }
 
 //go:generate mockery --case=snake --outpkg=storagemocks --output=platform/storage/storagemocks --name=ReleaseRepository
