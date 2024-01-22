@@ -6,6 +6,7 @@ import (
 
 	"github.com/marcohb99/go-api-example/internal/platform/server"
 	"github.com/marcohb99/go-api-example/internal/platform/storage/mysql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 const (
