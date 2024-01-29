@@ -1,3 +1,10 @@
+## 0.4.1 (2024-01-29)
+
+### Refactor
+
+- **command-bus**: add logic to refactor process using command pattern
+- **command**: add command domain
+
 ## 0.4.0 (2024-01-29)
 
 ### Feat
