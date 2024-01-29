@@ -1,3 +1,14 @@
+## 0.4.0 (2024-01-29)
+
+### Feat
+
+- **useCase**: add application service and refactor logic
+- **repository**: add all function to repository and test it
+
+### Fix
+
+- update repository mocj
+
 ## 0.3.0 (2024-01-03)
 
 ### Feat
