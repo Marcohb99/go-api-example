@@ -1,10 +1,12 @@
 package release
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	apiExample "github.com/marcohb99/go-api-example/internal"
+	"github.com/marcohb99/go-api-example/internal/creating"
 )
 
 const (
@@ -25,7 +27,7 @@ type createReleaseRequest struct {
 }
 
 // CreateHandler returns an HTTP handler for courses creation.
-func CreateHandler(releaseRepository apiExample.ReleaseRepository) gin.HandlerFunc {
+func CreateHandler(creatingReleaseService creating.ReleaseService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// request processing
 		var req createReleaseRequest
@@ -36,17 +38,20 @@ func CreateHandler(releaseRepository apiExample.ReleaseRepository) gin.HandlerFu
 			return
 		}
 
-		// instantiate object
-		release, err := apiExample.NewRelease(req.ID, req.Title, req.Released, req.ResourceUrl, req.Uri, req.Year)
+		err := creatingReleaseService.CreateRelease(ctx, req.ID, req.Title, req.Released, req.ResourceUrl, req.Uri, req.Year) 
+
+		// Return 400 Bad Request if any validation error occurs.
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, err.Error())
-			return
-		}
-		
-		// save object
-		if err := releaseRepository.Save(ctx, release); err != nil {
-			ctx.JSON(http.StatusInternalServerError, err.Error())
-			return
+			switch {
+			case errors.Is(err, apiExample.ErrInvalidReleaseID),
+				errors.Is(err, apiExample.ErrEmptyReleaseTitle), errors.Is(err, apiExample.ErrEmptyReleaseResourceUrl),
+				errors.Is(err, apiExample.ErrEmptyReleaseURI), errors.Is(err, apiExample.ErrEmptyReleaseYear):
+				ctx.JSON(http.StatusBadRequest, err.Error())
+				return
+			default:
+				ctx.JSON(http.StatusInternalServerError, err.Error())
+				return
+			}
 		}
 
 		ctx.Status(http.StatusCreated)

@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/marcohb99/go-api-example/internal/creating"
 	"github.com/marcohb99/go-api-example/internal/platform/storage/storagemocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -22,12 +23,14 @@ func TestHandler_Create(t *testing.T)  {
 	// it will return no errors
 	releaseRepository.On("Save", mock.Anything, mock.Anything).Return(nil)
 
+	createReleaseSrv := creating.NewReleaseService(releaseRepository)
+
 	// gin setup
 	gin.SetMode(gin.TestMode)
 	r := gin.New() // created with no parameters
 	
 	// declare routes
-	r.POST("/releases", CreateHandler(releaseRepository))
+	r.POST("/releases", CreateHandler(createReleaseSrv))
 
 	// TESTS
 	t.Run("given an invalid request it returns 400", func(t *testing.T) {

@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	apiExample "github.com/marcohb99/go-api-example/internal"
+	"github.com/marcohb99/go-api-example/internal/creating"
 	"github.com/marcohb99/go-api-example/internal/platform/server/handler/health"
 	"github.com/marcohb99/go-api-example/internal/platform/server/handler/hello"
 	"github.com/marcohb99/go-api-example/internal/platform/server/handler/release"
@@ -17,15 +17,16 @@ type Server struct {
 	engine   *gin.Engine
 
 	// dependencies
-	releaseRepository apiExample.ReleaseRepository
+	creatingReleaseServcie creating.ReleaseService
 }
 
-func New(host string, port uint, releaseRepository apiExample.ReleaseRepository) Server {
+func New(host string, port uint, creatingReleaseServcie creating.ReleaseService) Server {
 	srv := Server{
 		httpAddr: fmt.Sprintf("%s:%d", host, port),
 		engine:   gin.New(),
 
-		releaseRepository: releaseRepository,
+		// dependencies
+		creatingReleaseServcie: creatingReleaseServcie,
 	}
 
 	srv.registerRoutes()
@@ -46,5 +47,5 @@ func (s *Server) registerRoutes() {
 	s.engine.GET("/hello", hello.GetHandler())
 
 	// release
-	s.engine.POST("/releases", release.CreateHandler(s.releaseRepository))
+	s.engine.POST("/releases", release.CreateHandler(s.creatingReleaseServcie))
 }

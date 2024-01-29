@@ -4,9 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/marcohb99/go-api-example/internal/creating"
 	"github.com/marcohb99/go-api-example/internal/platform/server"
 	"github.com/marcohb99/go-api-example/internal/platform/storage/mysql"
-	_ "github.com/go-sql-driver/mysql"
 )
 
 const (
@@ -32,6 +33,9 @@ func Run() error {
 	// repository
 	releaseRepository := mysql.NewReleaseRepository(db)
 
-	srv := server.New(host, port, releaseRepository)
+	// service
+	creatingReleaseService := creating.NewReleaseService(releaseRepository)
+
+	srv := server.New(host, port, creatingReleaseService)
 	return srv.Run()
 }
