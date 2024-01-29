@@ -6,6 +6,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/marcohb99/go-api-example/internal/creating"
+	"github.com/marcohb99/go-api-example/internal/platform/bus/inmemory"
 	"github.com/marcohb99/go-api-example/internal/platform/server"
 	"github.com/marcohb99/go-api-example/internal/platform/storage/mysql"
 )
@@ -36,6 +37,13 @@ func Run() error {
 	// service
 	creatingReleaseService := creating.NewReleaseService(releaseRepository)
 
-	srv := server.New(host, port, creatingReleaseService)
+	// command
+	var (
+		commandBus = inmemory.NewCommandBus()
+	)
+	createReleaseCommandHandler := creating.NewReleaseCommandHandler(creatingReleaseService)
+	commandBus.Register(creating.ReleaseCommandType, createReleaseCommandHandler)
+
+	srv := server.New(host, port, commandBus)
 	return srv.Run()
 }

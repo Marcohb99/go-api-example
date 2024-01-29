@@ -8,39 +8,37 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	"github.com/marcohb99/go-api-example/internal/creating"
-	"github.com/marcohb99/go-api-example/internal/platform/storage/storagemocks"
+	"github.com/marcohb99/go-api-example/kit/commandmocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 )
 
-func TestHandler_Create(t *testing.T)  {
+func TestHandler_Create(t *testing.T) {
 	// setup
-	releaseRepository := new(storagemocks.ReleaseRepository)
-
-	// when receiving the method save with any context and any release object
-	// it will return no errors
-	releaseRepository.On("Save", mock.Anything, mock.Anything).Return(nil)
-
-	createReleaseSrv := creating.NewReleaseService(releaseRepository)
+	commandBus := new(commandmocks.Bus)
+	commandBus.On(
+		"Dispatch",
+		mock.Anything,
+		mock.AnythingOfType("creating.ReleaseCommand"),
+	).Return(nil)
 
 	// gin setup
 	gin.SetMode(gin.TestMode)
 	r := gin.New() // created with no parameters
-	
+
 	// declare routes
-	r.POST("/releases", CreateHandler(createReleaseSrv))
+	r.POST("/releases", CreateHandler(commandBus))
 
 	// TESTS
 	t.Run("given an invalid request it returns 400", func(t *testing.T) {
 		// GIVEN
 		request := createReleaseRequest{
-			ID: "8a1c5cdc-ba57-445a-994d-aa412d23723f",
-			Title: "Ultra Mono",
-			Released: "2020-01-01",
+			ID:          "8a1c5cdc-ba57-445a-994d-aa412d23723f",
+			Title:       "Ultra Mono",
+			Released:    "2020-01-01",
 			ResourceUrl: "https://api.discogs.com/releases/1809205",
-			Uri: "https://www.discogs.com/master/1809205-Idles-Ultra-Mono",
+			Uri:         "https://www.discogs.com/master/1809205-Idles-Ultra-Mono",
 			// year is missing
 		}
 
@@ -50,7 +48,7 @@ func TestHandler_Create(t *testing.T)  {
 
 		req, err := http.NewRequest(http.MethodPost, "/releases", bytes.NewBuffer(b))
 		require.NoError(t, err)
-		
+
 		// WHEN: send request
 		rec := httptest.NewRecorder()
 		r.ServeHTTP(rec, req)
@@ -65,12 +63,12 @@ func TestHandler_Create(t *testing.T)  {
 	t.Run("given a valid request it returns 201", func(t *testing.T) {
 		// GIVEN
 		request := createReleaseRequest{
-			ID: "8a1c5cdc-ba57-445a-994d-aa412d23723f",
-			Title: "Ultra Mono",
-			Released: "2020-01-01",
+			ID:          "8a1c5cdc-ba57-445a-994d-aa412d23723f",
+			Title:       "Ultra Mono",
+			Released:    "2020-01-01",
 			ResourceUrl: "https://api.discogs.com/releases/1809205",
-			Uri: "https://www.discogs.com/master/1809205-Idles-Ultra-Mono",
-			Year: "2020",
+			Uri:         "https://www.discogs.com/master/1809205-Idles-Ultra-Mono",
+			Year:        "2020",
 		}
 
 		b, err := json.Marshal(request)
@@ -79,7 +77,7 @@ func TestHandler_Create(t *testing.T)  {
 
 		req, err := http.NewRequest(http.MethodPost, "/releases", bytes.NewBuffer(b))
 		require.NoError(t, err)
-		
+
 		// WHEN: send request
 		rec := httptest.NewRecorder()
 		r.ServeHTTP(rec, req)

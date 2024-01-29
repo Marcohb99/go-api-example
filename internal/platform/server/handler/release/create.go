@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	apiExample "github.com/marcohb99/go-api-example/internal"
 	"github.com/marcohb99/go-api-example/internal/creating"
+	command "github.com/marcohb99/go-api-example/kit"
 )
 
 const (
@@ -27,7 +28,7 @@ type createReleaseRequest struct {
 }
 
 // CreateHandler returns an HTTP handler for courses creation.
-func CreateHandler(creatingReleaseService creating.ReleaseService) gin.HandlerFunc {
+func CreateHandler(commandBus command.Bus) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// request processing
 		var req createReleaseRequest
@@ -38,7 +39,14 @@ func CreateHandler(creatingReleaseService creating.ReleaseService) gin.HandlerFu
 			return
 		}
 
-		err := creatingReleaseService.CreateRelease(ctx, req.ID, req.Title, req.Released, req.ResourceUrl, req.Uri, req.Year) 
+		err := commandBus.Dispatch(ctx, creating.NewReleaseCommand(
+			req.ID,
+			req.Title,
+			req.Released,
+			req.ResourceUrl,
+			req.Uri,
+			req.Year,
+		))
 
 		// Return 400 Bad Request if any validation error occurs.
 		if err != nil {
