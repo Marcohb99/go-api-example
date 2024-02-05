@@ -1,8 +1,10 @@
 package bootstrap
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/marcohb99/go-api-example/internal/creating"
@@ -14,6 +16,7 @@ import (
 const (
 	host = "localhost"
 	port = 8080
+	shutdownTimeout = 10 * time.Second
 
 	// Database constants
 	dbUser = "mhb"
@@ -44,6 +47,6 @@ func Run() error {
 	createReleaseCommandHandler := creating.NewReleaseCommandHandler(creatingReleaseService)
 	commandBus.Register(creating.ReleaseCommandType, createReleaseCommandHandler)
 
-	srv := server.New(host, port, commandBus)
-	return srv.Run()
+	ctx, srv := server.New(context.Background(), host, port, shutdownTimeout, commandBus)
+	return srv.Run(ctx)
 }
