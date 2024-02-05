@@ -1,3 +1,9 @@
+## 0.5.0 (2024-02-05)
+
+### Feat
+
+- **server**: add support for graceful shutdown
+
 ## 0.4.1 (2024-01-29)
 
 ### Refactor
