@@ -24,6 +24,7 @@ const (
 	dbHost = "localhost"
 	dbPort = "3306"
 	dbName = "releases"
+	dbTimeout = 5 * time.Second
 )
 
 func Run() error {
@@ -35,7 +36,7 @@ func Run() error {
 	}
 
 	// repository
-	releaseRepository := mysql.NewReleaseRepository(db)
+	releaseRepository := mysql.NewReleaseRepository(db, dbTimeout)
 
 	// service
 	creatingReleaseService := creating.NewReleaseService(releaseRepository)

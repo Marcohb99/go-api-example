@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"time"
 
 	"github.com/huandu/go-sqlbuilder"
 	apiExample "github.com/marcohb99/go-api-example/internal"
@@ -12,12 +13,14 @@ import (
 // ReleaseRepository is a MySQL apiExample.ReleaseRepository implementation.
 type ReleaseRepository struct {
 	db *sql.DB
+	dbTimeout time.Duration
 }
 
 // NewReleaseRepository initializes a MySQL-based implementation of apiExample.ReleaseRepository.
-func NewReleaseRepository(db *sql.DB) *ReleaseRepository {
+func NewReleaseRepository(db *sql.DB, dbTimeout time.Duration) *ReleaseRepository {
 	return &ReleaseRepository{
 		db: db,
+		dbTimeout: dbTimeout,
 	}
 }
 
@@ -36,8 +39,11 @@ func (r *ReleaseRepository) Save(ctx context.Context, release apiExample.Release
 		Year:        release.Year().String(),
 	}).Build()
 
+	ctxTimeout, cancel := context.WithTimeout(ctx, r.dbTimeout)
+	defer cancel()
+
 	// execute the query
-	_, err := r.db.ExecContext(ctx, query, args...)
+	_, err := r.db.ExecContext(ctxTimeout, query, args...)
 	if err != nil {
 		return fmt.Errorf("error trying to persist release on database: %v", err)
 	}

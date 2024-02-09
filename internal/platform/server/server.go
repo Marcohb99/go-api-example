@@ -54,7 +54,7 @@ func serverContext(ctx context.Context) context.Context {
 	// as soon as the operations running in this Context complete.
 	ctx, cancel := context.WithCancel(ctx)
 	go func() {
-		<-c
+		<-c // bloquea el canal hasta que se notifique una señal
 		cancel()
 	}()
 
@@ -69,13 +69,14 @@ func (s *Server) Run(ctx context.Context) error {
 		Handler: s.engine,
 	}
 
+	// run the server in a goroutine so that it doesn't block
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatal("server shut down", err)
 		}
 	}()
 
-	<-ctx.Done()
+	<-ctx.Done() // receive a signal to stop the server
 	ctxShutDown, cancel := context.WithTimeout(context.Background(), s.shutdownTimeout)
 	defer cancel()
 

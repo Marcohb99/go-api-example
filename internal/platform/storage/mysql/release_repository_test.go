@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"testing"
+	"time"
 
 	sqlMock "github.com/DATA-DOG/go-sqlmock"
 	apiExample "github.com/marcohb99/go-api-example/internal"
@@ -29,7 +30,7 @@ func Test_ReleaseRepository_Save_RepositoryError(t *testing.T) {
 		WithArgs(id, title, released, resourceUrl, uri, year).WillReturnError(errors.New("something-failed"))
 
 	// when saving the release
-	repo := NewReleaseRepository(db)
+	repo := NewReleaseRepository(db, 1*time.Millisecond)
 	err = repo.Save(context.Background(), release)
 
 	// then the mocked db should be called
@@ -56,7 +57,7 @@ func Test_ReleaseRepository_Save_Success(t *testing.T) {
 		WithArgs(id, title, released, resourceUrl, uri, year).WillReturnResult(sqlMock.NewResult(0, 1))
 
 	// when saving the release
-	repo := NewReleaseRepository(db)
+	repo := NewReleaseRepository(db, 1*time.Millisecond)
 	err = repo.Save(context.Background(), release)
 
 	// then the mocked db should be called
@@ -72,7 +73,7 @@ func Test_ReleaseRepository_All_RepositoryError(t *testing.T) {
 	mock.ExpectExec("SELECT * FROM releases").WillReturnError(errors.New("something-failed"))
 
 	// when retrieving the release
-	repo := NewReleaseRepository(db)
+	repo := NewReleaseRepository(db, 1*time.Millisecond)
 	result, err := repo.All(context.Background())
 
 	// then the mocked db should be called
@@ -89,7 +90,7 @@ func Test_ReleaseRepository_All_Success(t *testing.T) {
 	mock.ExpectExec("SELECT * FROM releases").WillReturnResult(sqlMock.NewResult(0, 2))
 
 	// when saving the release
-	repo := NewReleaseRepository(db)
+	repo := NewReleaseRepository(db, 1*time.Millisecond)
 	_, err = repo.All(context.Background())
 
 	// then the mocked db should be called
