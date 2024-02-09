@@ -1,3 +1,9 @@
+## 0.6.0 (2024-02-09)
+
+### Feat
+
+- **repo**: add db timeout and execute with timeout context
+
 ## 0.5.0 (2024-02-05)
 
 ### Feat
