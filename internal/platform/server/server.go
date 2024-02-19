@@ -13,6 +13,8 @@ import (
 	"github.com/marcohb99/go-api-example/internal/platform/server/handler/health"
 	"github.com/marcohb99/go-api-example/internal/platform/server/handler/hello"
 	"github.com/marcohb99/go-api-example/internal/platform/server/handler/release"
+	"github.com/marcohb99/go-api-example/internal/platform/server/middleware/logging"
+	"github.com/marcohb99/go-api-example/internal/platform/server/middleware/recovery"
 	command "github.com/marcohb99/go-api-example/kit"
 )
 
@@ -47,10 +49,10 @@ func serverContext(ctx context.Context) context.Context {
 	c := make(chan os.Signal, 1)
 	// make the channel listen for an interrupt signal
 	signal.Notify(c, os.Interrupt)
-	// WithCancel returns a copy of parent with a new Done channel. 
-	// The returned context's Done channel is closed when the returned cancel function is called or 
+	// WithCancel returns a copy of parent with a new Done channel.
+	// The returned context's Done channel is closed when the returned cancel function is called or
 	// when the parent context's Done channel is closed, whichever happens first.
-	// Canceling this context releases resources associated with it, so code should call cancel 
+	// Canceling this context releases resources associated with it, so code should call cancel
 	// as soon as the operations running in this Context complete.
 	ctx, cancel := context.WithCancel(ctx)
 	go func() {
@@ -85,6 +87,7 @@ func (s *Server) Run(ctx context.Context) error {
 
 // ROUTES
 func (s *Server) registerRoutes() {
+	s.engine.Use(recovery.Middleware(), logging.Middleware())
 	// hc
 	s.engine.GET("/health", health.CheckHandler())
 
