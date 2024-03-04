@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	event "github.com/marcohb99/go-api-example/kit/events"
 )
 
 // REPOSITORIES
@@ -29,6 +30,8 @@ type Release struct {
 	resourceUrl ReleaseResourceUrl
 	uri         ReleaseURI
 	year        ReleaseYear
+
+	events []event.Event
 }
 
 // NewRelease creates a new release.
@@ -63,14 +66,38 @@ func NewRelease(id, title, released, resourceUrl, uri, year string) (Release, er
 		return Release{}, err
 	}
 
-	return Release{
+	release := Release{
 		id:          idVO,
 		title:       titleVO,
 		released:    releasedVO,
 		resourceUrl: resourceUrlVO,
 		uri:         uriVO,
 		year:        yearVO,
-	}, nil
+	}
+
+	release.Record(NewReleaseCreatedEvent(
+		idVO.String(),
+		titleVO.String(),
+		releasedVO.String(),
+		resourceUrlVO.String(),
+		uriVO.String(),
+		yearVO.String(),
+		))
+	
+	return release, nil
+}
+
+// Record records a new domain event.
+func (r *Release) Record(evt event.Event) {
+	r.events = append(r.events, evt)
+}
+
+// PullEvents returns all the recorded domain events.
+func (r Release) PullEvents() []event.Event {
+	evt := r.events
+	r.events = []event.Event{}
+
+	return evt
 }
 
 // ID returns the release unique identifier.

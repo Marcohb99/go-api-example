@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	"github.com/marcohb99/go-api-example/kit/commandmocks"
+	"github.com/marcohb99/go-api-example/kit/command/commandmocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
