@@ -9,7 +9,7 @@ import (
 
 const ReleaseCommandType command.Type = "command.creating.release"
 
-// ReleaseCommand is the command dispatched to create a new course.
+// ReleaseCommand is the command dispatched to create a new release.
 type ReleaseCommand struct {
 	id          string
 	title       string
@@ -36,7 +36,7 @@ func (c ReleaseCommand) Type() command.Type {
 }
 
 // ReleaseCommandHandler is the command handler
-// responsible for creating courses.
+// responsible for creating releases.
 type ReleaseCommandHandler struct {
 	service ReleaseService
 }

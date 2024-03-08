@@ -32,6 +32,11 @@ func (_m *Bus) Publish(_a0 context.Context, _a1 []event.Event) error {
 	return r0
 }
 
+// Subscribe provides a mock function with given fields: _a0, _a1
+func (_m *Bus) Subscribe(_a0 event.Type, _a1 event.Handler) {
+	_m.Called(_a0, _a1)
+}
+
 // NewBus creates a new instance of Bus. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
 // The first argument is typically a *testing.T value.
 func NewBus(t interface {
