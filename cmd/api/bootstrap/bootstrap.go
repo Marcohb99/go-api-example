@@ -30,30 +30,31 @@ const (
 )
 
 func Run() error {
-	// MySQL connection
+	// MYSQL
 	mysqlURI := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
 	db, err := sql.Open("mysql", mysqlURI)
 	if err != nil {
 		return err
 	}
 
+	// BUSES
 	var (
 		commandBus = inmemory.NewCommandBus()
 		eventBus   = inmemory.NewEventBus()
 	)
 
-	// repository
+	// REPOSITORIES
 	releaseRepository := mysql.NewReleaseRepository(db, dbTimeout)
 
-	// service
+	// SERVICES
 	creatingReleaseService := creating.NewReleaseService(releaseRepository, eventBus)
 	increasingReleaseCounterService := increasing.NewReleaseCounterService()
 
-	// register command
+	// COMMANDS
 	createReleaseCommandHandler := creating.NewReleaseCommandHandler(creatingReleaseService)
 	commandBus.Register(creating.ReleaseCommandType, createReleaseCommandHandler)
 
-	// subscribe events
+	// EVENTS
 	eventBus.Subscribe(
 		apiExample.ReleaseCreatedEventType,
 		creating.NewIncreaseReleasesCounterOnReleaseCreated(increasingReleaseCounterService),
