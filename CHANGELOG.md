@@ -1,3 +1,11 @@
+## 0.7.0 (2024-03-15)
+
+### Feat
+
+- **event-handler-and-subscriber**: implemented the in memory event bus and added a handler to increase the total releases when a release is created
+- **events**: add domain events, record events on entity creation and publish in event bus after creation
+- **middleware**: add logging and recovery middlewares and test them
+
 ## 0.6.0 (2024-02-09)
 
 ### Feat
