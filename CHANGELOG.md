@@ -1,3 +1,13 @@
+## 2.0.0 (2024-03-22)
+
+### BREAKING CHANGE
+
+- removed a method
+
+### Feat
+
+- remove all method from repo and fix tests
+
 ## 1.0.0 (2024-03-22)
 
 ### BREAKING CHANGE
