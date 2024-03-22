@@ -16,7 +16,6 @@ import (
 // ReleaseRepository defines the expected behaviour for a release storage service.
 type ReleaseRepository interface {
 	Save(ctx context.Context, release Release) error
-	All(ctx context.Context) ([]Release, error)
 }
 
 //go:generate mockery --case=snake --outpkg=storagemocks --output=platform/storage/storagemocks --name=ReleaseRepository
@@ -82,8 +81,8 @@ func NewRelease(id, title, released, resourceUrl, uri, year string) (Release, er
 		resourceUrlVO.String(),
 		uriVO.String(),
 		yearVO.String(),
-		))
-	
+	))
+
 	return release, nil
 }
 
@@ -258,6 +257,7 @@ func NewReleaseURI(value string) (ReleaseURI, error) {
 func (u ReleaseURI) String() string {
 	return u.value
 }
+
 // Year
 var ErrEmptyReleaseYear = errors.New("empty Release year")
 var ErrInvalidReleaseYear = errors.New("invalid Release year, it must be a number")
