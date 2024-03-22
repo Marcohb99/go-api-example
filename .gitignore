@@ -21,3 +21,5 @@
 go.work
 
 .idea/
+mysql_data
+.env

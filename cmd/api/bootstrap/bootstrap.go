@@ -16,24 +16,10 @@ import (
 	"github.com/marcohb99/go-api-example/internal/platform/storage/mysql"
 )
 
-const (
-	host            = "localhost"
-	port            = 8080
-	shutdownTimeout = 10 * time.Second
-
-	// Database constants
-	dbUser    = "mhb"
-	dbPass    = "mhb"
-	dbHost    = "localhost"
-	dbPort    = "3306"
-	dbName    = "releases"
-	dbTimeout = 5 * time.Second
-)
-
 func Run() error {
 	// MYSQL
 	var cfg config
-	err := envconfig.Process("MOOC", &cfg)
+	err := envconfig.Process("MHB", &cfg)
 	if err != nil {
 		return err
 	}
@@ -50,7 +36,7 @@ func Run() error {
 	)
 
 	// REPOSITORIES
-	releaseRepository := mysql.NewReleaseRepository(db, dbTimeout)
+	releaseRepository := mysql.NewReleaseRepository(db, cfg.DbTimeout)
 
 	// SERVICES
 	creatingReleaseService := creating.NewReleaseService(releaseRepository, eventBus)
@@ -66,7 +52,7 @@ func Run() error {
 		creating.NewIncreaseReleasesCounterOnReleaseCreated(increasingReleaseCounterService),
 	)
 
-	ctx, srv := server.New(context.Background(), host, port, shutdownTimeout, commandBus)
+	ctx, srv := server.New(context.Background(), cfg.Host, cfg.Port, cfg.ShutdownTimeout, commandBus)
 	return srv.Run(ctx)
 }
 
@@ -76,10 +62,10 @@ type config struct {
 	Port            uint          `required:"true" default:"8080"`
 	ShutdownTimeout time.Duration `split_words:"true" default:"10s"`
 	// Database configuration
-	DbUser    string        `required:"true" default:"mhb"`
-	DbPass    string        `required:"true" default:"mhb"`
-	DbHost    string        `required:"true" default:"localhost"`
-	DbPort    uint          `required:"true" default:"3306"`
-	DbName    string        `required:"true" default:"mhb"`
-	DbTimeout time.Duration `default:"5s"`
+	DbUser    string        `split_words:"true" required:"true" default:"mhb"`
+	DbPass    string        `split_words:"true" required:"true" default:"mhb"`
+	DbHost    string        `split_words:"true" required:"true" default:"localhost"`
+	DbPort    uint          `split_words:"true" required:"true" default:"3306"`
+	DbName    string        `split_words:"true" required:"true" default:"mhb"`
+	DbTimeout time.Duration `split_words:"true" default:"5s"`
 }

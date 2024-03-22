@@ -5,7 +5,7 @@ const (
 )
 
 type sqlRelease struct {
-	ID          string `db:"id"`
+	ID          string `db:"uuid"`
 	Title       string `db:"title"`
 	Released    string `db:"released"`
 	ResourceUrl string `db:"resource_url"`

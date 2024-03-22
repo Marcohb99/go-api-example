@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mooc-api:
+    build: .
+    environment:
+      MHB_HOST: 0.0.0.0
+      MHB_DB_HOST: mysql
+    ports:
+      - 8080:8080
+
+  mysql:
+    image: mysql:8.0.22
+    platform: linux/amd64
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_DATABASE: mhb
+      MYSQL_USER: mhb
+      MYSQL_PASSWORD: mhb
+      MYSQL_ROOT_PASSWORD: mhb
+
+volumes:
+  mysql_data:
