@@ -1,3 +1,13 @@
+## 1.0.0 (2024-03-22)
+
+### BREAKING CHANGE
+
+- first major
+
+### Feat
+
+- all working
+
 ## 0.7.0 (2024-03-15)
 
 ### Feat
