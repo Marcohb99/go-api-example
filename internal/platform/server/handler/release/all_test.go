@@ -3,6 +3,7 @@ package release
 import (
 	"bytes"
 	"github.com/gin-gonic/gin"
+	apiExample "github.com/marcohb99/go-api-example/internal"
 	"github.com/marcohb99/go-api-example/kit/command/commandmocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -20,7 +21,7 @@ func TestHandler_GetAll(t *testing.T) {
 		"Dispatch",
 		mock.Anything,
 		mock.AnythingOfType("retrieving.ReleaseCommand"),
-	).Return(nil)
+	).Return([]apiExample.Release{}, nil)
 
 	// gin setup
 	gin.SetMode(gin.TestMode)

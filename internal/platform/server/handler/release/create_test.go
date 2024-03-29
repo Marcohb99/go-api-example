@@ -21,7 +21,7 @@ func TestHandler_Create(t *testing.T) {
 		"Dispatch",
 		mock.Anything,
 		mock.AnythingOfType("creating.ReleaseCommand"),
-	).Return(nil)
+	).Return(nil, nil)
 
 	// gin setup
 	gin.SetMode(gin.TestMode)

@@ -96,7 +96,8 @@ func Test_ReleaseRepository_GetAll_Success(t *testing.T) {
 	db, dbMock, err := sqlMock.New(sqlMock.QueryMatcherOption(sqlMock.QueryMatcherEqual))
 	require.NoError(t, err)
 	limit := 10
-	dbMock.ExpectQuery("SELECT * FROM releases LIMIT 10").
+	dbMock.ExpectQuery("SELECT * FROM releases LIMIT ?").
+		WithArgs(limit).
 		WillReturnRows(sqlMock.NewRows([]string{"uuid", "title", "released", "resource_url", "uri", "year"}))
 
 	// and a mocked factory
@@ -123,7 +124,8 @@ func Test_ReleaseRepository_GetAll_Error(t *testing.T) {
 	db, mock, err := sqlMock.New(sqlMock.QueryMatcherOption(sqlMock.QueryMatcherEqual))
 	require.NoError(t, err)
 	limit := 10
-	mock.ExpectQuery("SELECT * FROM releases LIMIT 10").
+	mock.ExpectQuery("SELECT * FROM releases LIMIT ?").
+		WithArgs(limit).
 		WillReturnError(errors.New("something failed"))
 
 	// when saving the release

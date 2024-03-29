@@ -55,14 +55,11 @@ func (r *ReleaseRepository) Save(ctx context.Context, release apiExample.Release
 
 // GetAll implements the apiExample.ReleaseRepository interface.
 func (r *ReleaseRepository) GetAll(ctx context.Context, limit int) ([]apiExample.Release, error) {
-
 	ctxTimeout, cancel := context.WithTimeout(ctx, r.dbTimeout)
 	defer cancel()
 
-	query, _ := sqlbuilder.NewSelectBuilder().Select("*").From(sqlReleaseTable).Limit(limit).Build()
-
 	// execute the query
-	result, err := r.db.QueryContext(ctxTimeout, query, nil)
+	result, err := r.db.QueryContext(ctxTimeout, "SELECT * FROM "+sqlReleaseTable+" LIMIT ?", limit)
 	if err != nil {
 		return []apiExample.Release{}, fmt.Errorf("error trying to get releases from database: %v", err)
 	}
