@@ -1,3 +1,12 @@
+## 2.1.0 (2024-03-29)
+
+### Feat
+
+- ALL working!
+- **repository**: implement GetAll method
+- **all**: implement and test the service
+- **all**: add endpoint, handler and command
+
 ## 2.0.0 (2024-03-22)
 
 ### BREAKING CHANGE
