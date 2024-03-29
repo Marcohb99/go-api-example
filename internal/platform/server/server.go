@@ -95,5 +95,6 @@ func (s *Server) registerRoutes() {
 	s.engine.GET("/hello", hello.GetHandler())
 
 	// release
+	s.engine.GET("/releases", release.GetAllHandler(s.commandBus))
 	s.engine.POST("/releases", release.CreateHandler(s.commandBus))
 }

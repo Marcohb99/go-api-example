@@ -12,7 +12,6 @@ import (
 	event "github.com/marcohb99/go-api-example/kit/events"
 )
 
-// REPOSITORIES
 // ReleaseRepository defines the expected behaviour for a release storage service.
 type ReleaseRepository interface {
 	Save(ctx context.Context, release Release) error
@@ -20,7 +19,7 @@ type ReleaseRepository interface {
 
 //go:generate mockery --case=snake --outpkg=storagemocks --output=platform/storage/storagemocks --name=ReleaseRepository
 
-// ENTITIES
+// Release ENTITIES
 // Release is the data structure that represents a release.
 type Release struct {
 	id          ReleaseID

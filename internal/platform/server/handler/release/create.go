@@ -10,14 +10,6 @@ import (
 	command "github.com/marcohb99/go-api-example/kit"
 )
 
-const (
-	dbUser = "mhb"
-	dbPass = "root"
-	dbHost = "localhost"
-	dbPort = "3306"
-	dbName = "go_api_example"
-)
-
 type createReleaseRequest struct {
 	ID          string `json:"id" binding:"required"`
 	Title       string `json:"title" binding:"required"`
