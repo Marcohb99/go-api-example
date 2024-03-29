@@ -32,6 +32,32 @@ Sample request:
 }
 ```
 
+- GET /releases: Get all releases. Params
+  - limit: number of releases to return
+
+Sample response:
+
+```json
+[
+  {
+    "id": "BAD92BF5-9176-47BD-BCC6-8C38A5394A6E",
+    "title": "ultra mono",
+    "released": "2020-09-25",
+    "resource_url": "https://api.discogs.com/releases/15951324",
+    "uri": "https://www.discogs.com/release/15951324-Idles-Ultra-Mono",
+    "year": "2020"
+  },
+  {
+    "id": "BAD92BF5-9176-47BD-BCC6-8C38A5394A6F",
+    "title": "origin of symmetry",
+    "released": "2001-06-18",
+    "resource_url": "https://api.discogs.com/releases/15951324",
+    "uri": "https://www.discogs.com/release/15951324-Muse-Origin-Of-Symmetry",
+    "year": "2001"
+  }
+]
+```
+
 After this, you can search for the release in database:
 
 ```bash
@@ -50,7 +76,7 @@ go mod download
 ## Run
 
 ```bash
-docker compose up --build
+make up
 ```
 
 ## Test
