@@ -14,13 +14,15 @@ import (
 type ReleaseRepository struct {
 	db        *sql.DB
 	dbTimeout time.Duration
+	factory   apiExample.ReleaseFactory
 }
 
 // NewReleaseRepository initializes a MySQL-based implementation of apiExample.ReleaseRepository.
-func NewReleaseRepository(db *sql.DB, dbTimeout time.Duration) *ReleaseRepository {
+func NewReleaseRepository(db *sql.DB, dbTimeout time.Duration, factory apiExample.ReleaseFactory) *ReleaseRepository {
 	return &ReleaseRepository{
 		db:        db,
 		dbTimeout: dbTimeout,
+		factory:   factory,
 	}
 }
 
@@ -51,7 +53,26 @@ func (r *ReleaseRepository) Save(ctx context.Context, release apiExample.Release
 	return nil
 }
 
-// All implements the apiExample.ReleaseRepository interface.
+// GetAll implements the apiExample.ReleaseRepository interface.
 func (r *ReleaseRepository) GetAll(ctx context.Context, limit int) ([]apiExample.Release, error) {
-	return []apiExample.Release{}, nil
+
+	ctxTimeout, cancel := context.WithTimeout(ctx, r.dbTimeout)
+	defer cancel()
+
+	query, _ := sqlbuilder.NewSelectBuilder().Select("*").From(sqlReleaseTable).Limit(limit).Build()
+
+	// execute the query
+	result, err := r.db.QueryContext(ctxTimeout, query, nil)
+	if err != nil {
+		return []apiExample.Release{}, fmt.Errorf("error trying to get releases from database: %v", err)
+	}
+
+	// FACTORY
+	defer result.Close()
+
+	data, err := r.factory.BuildMany(result)
+	if err != nil {
+		return []apiExample.Release{}, fmt.Errorf("error trying to build releases from database: %v", err)
+	}
+	return data, nil
 }

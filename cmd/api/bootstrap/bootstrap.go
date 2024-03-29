@@ -7,6 +7,7 @@ import (
 	"github.com/kelseyhightower/envconfig"
 	apiExample "github.com/marcohb99/go-api-example/internal"
 	"github.com/marcohb99/go-api-example/internal/increasing"
+	mysql_factory "github.com/marcohb99/go-api-example/internal/platform/factory/mysql"
 	"github.com/marcohb99/go-api-example/internal/retrieving"
 	"time"
 
@@ -37,7 +38,7 @@ func Run() error {
 	)
 
 	// REPOSITORIES
-	releaseRepository := mysql.NewReleaseRepository(db, cfg.DbTimeout)
+	releaseRepository := mysql.NewReleaseRepository(db, cfg.DbTimeout, mysql_factory.NewReleaseFactory())
 
 	// SERVICES
 	creatingReleaseService := creating.NewReleaseService(releaseRepository, eventBus)

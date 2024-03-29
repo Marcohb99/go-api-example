@@ -20,6 +20,13 @@ type ReleaseRepository interface {
 
 //go:generate mockery --case=snake --outpkg=storagemocks --output=platform/storage/storagemocks --name=ReleaseRepository
 
+// ReleaseFactory defines the expected behaviour for a release factory service.
+type ReleaseFactory interface {
+	BuildMany(data interface{}) ([]Release, error)
+}
+
+//go:generate mockery --case=snake --outpkg=factorymocks --output=platform/factory/factorymocks --name=ReleaseFactory
+
 // Release ENTITIES
 // Release is the data structure that represents a release.
 type Release struct {
