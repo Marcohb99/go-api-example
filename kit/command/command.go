@@ -22,5 +22,5 @@ type Command interface {
 
 // Handler defines the expected behaviour from a command handler.
 type Handler interface {
-	Handle(context.Context, Command) error
+	Handle(context.Context, Command) (interface{}, error)
 }

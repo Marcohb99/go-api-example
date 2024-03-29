@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"github.com/marcohb99/go-api-example/kit/command"
 	"log"
 	"net/http"
 	"os"
@@ -15,7 +16,6 @@ import (
 	"github.com/marcohb99/go-api-example/internal/platform/server/handler/release"
 	"github.com/marcohb99/go-api-example/internal/platform/server/middleware/logging"
 	"github.com/marcohb99/go-api-example/internal/platform/server/middleware/recovery"
-	command "github.com/marcohb99/go-api-example/kit"
 )
 
 // Server encapsulates a server with an engine and an address

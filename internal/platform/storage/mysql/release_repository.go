@@ -50,3 +50,8 @@ func (r *ReleaseRepository) Save(ctx context.Context, release apiExample.Release
 
 	return nil
 }
+
+// All implements the apiExample.ReleaseRepository interface.
+func (r *ReleaseRepository) GetAll(ctx context.Context, limit int) ([]apiExample.Release, error) {
+	return []apiExample.Release{}, nil
+}

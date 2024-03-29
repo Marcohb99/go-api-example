@@ -2,12 +2,12 @@ package release
 
 import (
 	"errors"
+	"github.com/marcohb99/go-api-example/kit/command"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	apiExample "github.com/marcohb99/go-api-example/internal"
 	"github.com/marcohb99/go-api-example/internal/creating"
-	command "github.com/marcohb99/go-api-example/kit"
 )
 
 type createReleaseRequest struct {

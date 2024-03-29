@@ -7,6 +7,7 @@ import (
 	"github.com/kelseyhightower/envconfig"
 	apiExample "github.com/marcohb99/go-api-example/internal"
 	"github.com/marcohb99/go-api-example/internal/increasing"
+	"github.com/marcohb99/go-api-example/internal/retrieving"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -41,10 +42,14 @@ func Run() error {
 	// SERVICES
 	creatingReleaseService := creating.NewReleaseService(releaseRepository, eventBus)
 	increasingReleaseCounterService := increasing.NewReleaseCounterService()
+	retrievingReleaseService := retrieving.NewReleaseService(releaseRepository)
 
 	// COMMANDS
 	createReleaseCommandHandler := creating.NewReleaseCommandHandler(creatingReleaseService)
+	retrieveReleaseCommandHandler := retrieving.NewReleaseCommandHandler(retrievingReleaseService)
+
 	commandBus.Register(creating.ReleaseCommandType, createReleaseCommandHandler)
+	commandBus.Register(retrieving.ReleaseCommandType, retrieveReleaseCommandHandler)
 
 	// EVENTS
 	eventBus.Subscribe(

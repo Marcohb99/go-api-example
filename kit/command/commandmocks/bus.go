@@ -4,8 +4,7 @@ package commandmocks
 
 import (
 	context "context"
-
-	command "github.com/marcohb99/go-api-example/kit"
+	"github.com/marcohb99/go-api-example/kit/command"
 
 	mock "github.com/stretchr/testify/mock"
 )

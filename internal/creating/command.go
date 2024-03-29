@@ -3,8 +3,7 @@ package creating
 import (
 	"context"
 	"errors"
-
-	command "github.com/marcohb99/go-api-example/kit"
+	"github.com/marcohb99/go-api-example/kit/command"
 )
 
 const ReleaseCommandType command.Type = "command.creating.release"
@@ -49,13 +48,13 @@ func NewReleaseCommandHandler(service ReleaseService) ReleaseCommandHandler {
 }
 
 // Handle implements the command.Handler interface.
-func (h ReleaseCommandHandler) Handle(ctx context.Context, cmd command.Command) error {
+func (h ReleaseCommandHandler) Handle(ctx context.Context, cmd command.Command) (interface{}, error) {
 	createReleaseCmd, ok := cmd.(ReleaseCommand)
 	if !ok {
-		return errors.New("unexpected command")
+		return nil, errors.New("unexpected command")
 	}
 
-	return h.service.CreateRelease(
+	return nil, h.service.CreateRelease(
 		ctx,
 		createReleaseCmd.id,
 		createReleaseCmd.title,
