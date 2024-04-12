@@ -23,6 +23,7 @@ func Run() error {
 	var cfg config
 	err := envconfig.Process("MHB", &cfg)
 	if err != nil {
+		err = fmt.Errorf("bootstrap: error loading the configuration: %w", err)
 		return err
 	}
 	mysqlURI := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", cfg.DbUser, cfg.DbPass, cfg.DbHost, cfg.DbPort, cfg.DbName)
@@ -74,4 +75,6 @@ type config struct {
 	DbPort    uint          `split_words:"true" required:"true" default:"3306"`
 	DbName    string        `split_words:"true" required:"true" default:"mhb"`
 	DbTimeout time.Duration `split_words:"true" default:"5s"`
+	// API keys
+	//ApiKeys string `split_words:"true" required:"true" default:""`
 }
