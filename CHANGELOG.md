@@ -1,3 +1,10 @@
+## 2.2.0 (2024-04-12)
+
+### Feat
+
+- **auth**: add api keys to docker compose env
+- **auth**: add auth middleware that loads in memory api keys and checks if the user has given a valid api key
+
 ## 2.1.0 (2024-03-29)
 
 ### Feat
