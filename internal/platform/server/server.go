@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"github.com/kelseyhightower/envconfig"
 	"github.com/marcohb99/go-api-example/internal/platform/server/middleware/auth"
 	"github.com/marcohb99/go-api-example/kit/command"
 	"log"
@@ -88,12 +89,12 @@ func (s *Server) Run(ctx context.Context) error {
 
 // ROUTES
 func (s *Server) registerRoutes() {
-	//var cfg config
-	//err := envconfig.Process("MHB", &cfg)
-	//if err != nil {
-	//	log.Fatalf("server: error loading the configuration: %v", err)
-	//}
-	s.engine.Use(recovery.Middleware(), logging.Middleware(), auth.Middleware())
+	var cfg config
+	err := envconfig.Process("MHB", &cfg)
+	if err != nil {
+		log.Fatalf("server: error loading the configuration: %v", err)
+	}
+	s.engine.Use(recovery.Middleware(), logging.Middleware(), auth.Middleware(cfg.ApiKeys))
 	// hc
 	s.engine.GET("/health", health.CheckHandler())
 
@@ -105,7 +106,7 @@ func (s *Server) registerRoutes() {
 	s.engine.POST("/releases", release.CreateHandler(s.commandBus))
 }
 
-//type config struct {
-//	// API keys
-//	ApiKeys string `split_words:"true" required:"true" default:""`
-//}
+type config struct {
+	// API keys
+	ApiKeys string `split_words:"true" required:"true" default:""`
+}

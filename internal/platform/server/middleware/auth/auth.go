@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strings"
 )
 
 // Middleware is a gin.HandlerFunc that logs some information
 // of the incoming request and the consequent response.
-func Middleware() gin.HandlerFunc {
+func Middleware(apiKeysStr string) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		//apiKeys := strings.Split(apiKeysStr, ",")
-		apiKeys := []string{"sample-key-1", "sample-key-2", "sample-key-3"}
+		apiKeys := strings.Split(apiKeysStr, ",")
 		clientApiKey := ctx.GetHeader("X-API-KEY")
 		fmt.Println("API Keys: ", apiKeys)
 		fmt.Println("Client API Key: ", clientApiKey)

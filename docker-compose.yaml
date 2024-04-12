@@ -6,6 +6,7 @@ services:
     environment:
       MHB_HOST: 0.0.0.0
       MHB_DB_HOST: mysql
+      MHB_API_KEYS: "sample-key-1,sample-key-2,sample-key-3"
     ports:
       - 8080:8080
 

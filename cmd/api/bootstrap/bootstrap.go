@@ -76,5 +76,5 @@ type config struct {
 	DbName    string        `split_words:"true" required:"true" default:"mhb"`
 	DbTimeout time.Duration `split_words:"true" default:"5s"`
 	// API keys
-	//ApiKeys string `split_words:"true" required:"true" default:""`
+	ApiKeys string `split_words:"true" required:"true" default:""`
 }
